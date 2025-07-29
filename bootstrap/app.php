@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,5 +16,13 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        // Quanodo houver um erro de autenticação, redirecionar para a tela de login
+        $exceptions->render(function(AuthenticationException $exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
+        });
+
+
     })->create();
