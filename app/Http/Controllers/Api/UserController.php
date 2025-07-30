@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UserPasswordRequest;
 
 
 class UserController extends Controller
@@ -115,6 +116,46 @@ class UserController extends Controller
     }
 
 
+    public function updatePassword(UserPasswordRequest $request, User $user): JsonResponse
+    {
+
+        // Iniciar a transação
+        DB::beginTransaction();
+
+        try {
+
+            $user->update([
+                'password' => $request->password,
+            ]);
+
+            // Operação é concluída com êxito
+            DB::commit();
+
+            // Salvar log
+            Log::info('Senha do usuário editado.', ['user_id' => $user->id, 'action_user_id' => Auth::id()]);
+
+            // Retornar os dados em formato de objeto e status 200
+            return response()->json([
+                'status' => true,
+                'user' => $user,
+                'message' => 'Senha do usuário editado com sucesso!',
+            ], 200);
+        } catch (\Throwable $th) {
+
+            // Operação não é concluída com êxito
+            DB::rollBack();
+
+            // Salvar log
+            Log::notice('Senha do usuário não editado.', ['action_user_id' => Auth::id(), 'error' => $e->getMessage()]);
+
+            // Retornar os dados em formato de objeto e status 400
+            return response()->json([
+                'status' => false,
+                'message' => 'Senha do usuário não editado!',
+            ], 400);
+        }
+    }
+
     function destroy(User $id) : JsonResponse
     {
        try {
@@ -139,4 +180,7 @@ class UserController extends Controller
         ],400);
        }
     }
+
+
+
 }

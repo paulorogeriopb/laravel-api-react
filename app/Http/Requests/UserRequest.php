@@ -31,7 +31,7 @@ class UserRequest extends FormRequest
                 'email',
                 Rule::unique('users')->ignore($this->route('id')), // <-- Aqui está o segredo
             ],
-            'password' => 'required',
+            'password' => 'required_if:password,!=,null|min:8',
         ];
     }
 
