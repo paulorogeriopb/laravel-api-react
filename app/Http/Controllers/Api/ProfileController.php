@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
 
 
 class ProfileController extends Controller
@@ -108,4 +109,50 @@ class ProfileController extends Controller
             ], 400);
         }
     }
+
+
+
+    public function updatePassword(UserPasswordRequest $request): JsonResponse
+    {
+        try {
+            $user = Auth::user();
+
+            if (!($user instanceof \App\Models\User)) {
+                $user = \App\Models\User::find(Auth::id());
+            }
+
+
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Usuário não autenticado.'
+                ], 401);
+            }
+
+            // Atualiza a senha diretamente, sem checar a senha antiga
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+
+            Log::info('Senha alterada com sucesso.', ['user_id' => $user->id]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Senha atualizada com sucesso.'
+            ], 200);
+
+        } catch (\Throwable $th) {
+            Log::error('Erro ao atualizar a senha.', [
+                'user_id' => Auth::id(),
+                'error' => $th->getMessage()
+            ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Erro ao atualizar a senha.'
+            ], 500);
+        }
+    }
+
+
 }

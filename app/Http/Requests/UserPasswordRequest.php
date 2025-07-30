@@ -8,54 +8,32 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserPasswordRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Manipular falha de validação e retornar uma resposta JSON com os erros de validação.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator O objeto de validação que contém os erros de validação.
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'erros' => $validator->errors(),
-        ], 422));  // O código de status HTTP 422 significa "Unprocessable Entity" (Entidade Não Processável). Esse código é usado quando o servidor entende a requisição do cliente, mas não pode processá-la devido a erros de validação no lado do servidor.
+            'errors' => $validator->errors(),
+        ], 422));
     }
 
-    /**
-     * Retorna as regras de validação para os dados do usuário.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-
-        // Recuperar o id do usuário enviado na URL
-        $userId = $this->route('user');
-
         return [
-            'password' => 'required|min:6'
+            'password' => 'required|min:6|confirmed',
         ];
     }
 
-    /**
-     * Retorna as mensagens de erro personalizadas para as regras de validação.
-     *
-     * @return array
-     */
     public function messages(): array
     {
         return [
             'password.required' => 'Campo senha é obrigatório!',
             'password.min' => 'Senha com no mínimo :min caracteres!',
+            'password.confirmed' => 'Confirmação da senha não confere!',
         ];
     }
 }
