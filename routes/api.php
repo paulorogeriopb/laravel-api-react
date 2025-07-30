@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\RecoverPasswordCodeController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BillController;
 use App\Http\Controllers\Api\ProfileController;
@@ -10,7 +11,12 @@ use App\Http\Controllers\Api\ProfileController;
 
 
 //Rota pública
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');//http://0.0.0.0:8695/api/login
+
+//Recuperar senha
+Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, 'forgotPasswordCode']);
+
+
 
 //Rota privada
 Route::group(['middleware' => ['auth:sanctum']], function () {

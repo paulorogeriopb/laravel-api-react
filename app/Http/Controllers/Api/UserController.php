@@ -146,7 +146,7 @@ class UserController extends Controller
             DB::rollBack();
 
             // Salvar log
-            Log::notice('Senha do usuário não editado.', ['action_user_id' => Auth::id(), 'error' => $e->getMessage()]);
+            Log::notice('Senha do usuário não editado.', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
             // Retornar os dados em formato de objeto e status 400
             return response()->json([
