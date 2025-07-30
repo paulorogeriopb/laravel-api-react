@@ -122,7 +122,6 @@ class UserController extends Controller
 
         Log::info('Excluir o Usuário', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
 
-
         return response()->json([
             'status' => true,
             'user' => $id,
@@ -131,8 +130,8 @@ class UserController extends Controller
        } catch (\Throwable $th) {
 
         DB::rollBack();
-        Log::info('Erro ao Excluir o Usuário ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
+        Log::info('Erro ao Excluir o Usuário ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
         return response()->json([
             'status' => false,
