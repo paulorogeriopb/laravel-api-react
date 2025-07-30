@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/paulorogeriopb/laravel-api-react/compare/v1.0.3...v1.0.4) (2025-07-30)
+
+
+### Features
+
+* **custom:** auditing ([c0235eb](https://github.com/paulorogeriopb/laravel-api-react/commit/c0235eb3bd6585e7d10db284a4d1d7838ea00627))
+
 ### [1.0.3](https://github.com/paulorogeriopb/laravel-api-react/compare/v1.0.2...v1.0.3) (2025-07-30)
 
 
