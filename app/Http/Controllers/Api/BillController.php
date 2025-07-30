@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Bill;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 
 class BillController extends Controller
@@ -16,6 +18,8 @@ class BillController extends Controller
     {
         //Recupera os dados  e retorna com paginação
         $bills = Bill::orderby('id','desc')->paginate(40);
+
+        Log::info('Listar os Bills', ['action_user_id' => Auth::id()]);
 
         //Retorna os dados como uma resposta JSON
         return response()->json([
@@ -26,6 +30,9 @@ class BillController extends Controller
 
     public function show(Bill $id) : JsonResponse
     {
+
+        Log::info('Visualizar o Bill', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
+
         //Retorna os dados como uma resposta JSON
         return response()->json([
             'status' => true,
@@ -49,6 +56,8 @@ class BillController extends Controller
             //Confirma a transação
             DB::commit();
 
+            Log::info('Cadastrar o Bill', ['user_id' => $bill->id ,'action_user_id' => Auth::id()]);
+
             //Retorna os dados como uma resposta JSON com status 201
             return response()->json([
                 'status' => true,
@@ -56,6 +65,8 @@ class BillController extends Controller
                 'message' => 'created successfully'
             ],201);
         } catch (\Throwable $th) {
+
+            Log::info('Bill não Cadastrado', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
             //Cancela a transação em caso de erro
             DB::rollBack();
@@ -83,6 +94,8 @@ class BillController extends Controller
          //Confirma a transação
         DB::commit();
 
+        Log::info('Editar o Bill', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
+
         return response()->json([
             'status' => true,
             'bill' => $id,
@@ -92,6 +105,8 @@ class BillController extends Controller
 
         //Cancela a transação em caso de erro
         DB::rollBack();
+
+        Log::info('Erro ao Editar Bill ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
         return response()->json([
             'status' => false,
@@ -113,6 +128,9 @@ class BillController extends Controller
        } catch (\Throwable $th) {
 
         DB::rollBack();
+
+        Log::info('Erro ao Excluir Bill ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
+
         return response()->json([
             'status' => false,
             'message' => $th->getMessage()

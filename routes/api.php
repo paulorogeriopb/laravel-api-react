@@ -27,4 +27,10 @@ Route::get('/bills/{id}',[BillController::class, 'show']); //http://0.0.0.0:8695
 Route::post('/bills',[BillController::class, 'store']); //http://0.0.0.0:8695/api/bills
 Route::put('/bills/{id}',[BillController::class, 'update']); //http://0.0.0.0:8695/api/bills/1
 Route::delete('/bills/{id}',[BillController::class, 'destroy']); //http://0.0.0.0:8695/api/bills/1
+
+
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');//http://0.0.0.0:8695/api/logout
+
+
 });

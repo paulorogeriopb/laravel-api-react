@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 
 class UserController extends Controller
@@ -16,6 +17,8 @@ class UserController extends Controller
     {
         //Recupera os dados  e retorna com paginação
         $users = User::orderby('id','desc')->paginate(40);
+
+        Log::info('Listar os Usuários', ['action_user_id' => Auth::id()]);
 
         //Retorna os dados como uma resposta JSON
         return response()->json([
@@ -26,6 +29,8 @@ class UserController extends Controller
 
     public function show(User $id) : JsonResponse
     {
+        Log::info('Visualizar o Usuário', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
+
         //Retorna os dados como uma resposta JSON
         return response()->json([
             'status' => true,
@@ -49,6 +54,8 @@ class UserController extends Controller
             //Confirma a transação
             DB::commit();
 
+            Log::info('Cadastrar o Usuário', ['user_id' => $user->id ,'action_user_id' => Auth::id()]);
+
             //Retorna os dados como uma resposta JSON com status 201
             return response()->json([
                 'status' => true,
@@ -56,6 +63,8 @@ class UserController extends Controller
                 'message' => 'created successfully'
             ],201);
         } catch (\Throwable $th) {
+
+            Log::info('Usuário não Cadastrado', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
 
             //Cancela a transação em caso de erro
             DB::rollBack();
@@ -83,6 +92,8 @@ class UserController extends Controller
          //Confirma a transação
         DB::commit();
 
+        Log::info('Editar o Usuário', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
+
         return response()->json([
             'status' => true,
             'user' => $id,
@@ -92,6 +103,9 @@ class UserController extends Controller
 
         //Cancela a transação em caso de erro
         DB::rollBack();
+
+        Log::info('Erro ao Editar o Usuário ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
+
 
         return response()->json([
             'status' => false,
@@ -105,6 +119,10 @@ class UserController extends Controller
     {
        try {
         $id->delete();
+
+        Log::info('Excluir o Usuário', ['user_id' => $id->id ,'action_user_id' => Auth::id()]);
+
+
         return response()->json([
             'status' => true,
             'user' => $id,
@@ -113,6 +131,9 @@ class UserController extends Controller
        } catch (\Throwable $th) {
 
         DB::rollBack();
+        Log::info('Erro ao Excluir o Usuário ', ['action_user_id' => Auth::id(), 'error' => $th->getMessage()]);
+
+
         return response()->json([
             'status' => false,
             'message' => $th->getMessage()
