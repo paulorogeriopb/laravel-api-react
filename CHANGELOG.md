@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/paulorogeriopb/laravel-api-react/compare/v1.0.4...v1.0.5) (2025-07-31)
+
+
+### Features
+
+* **custom:** alterar senha ([9bad9f1](https://github.com/paulorogeriopb/laravel-api-react/commit/9bad9f1db6df4fd9ec8e68a115562703b5e63cb3))
+* **custom:** recuperar senha ([4e0c216](https://github.com/paulorogeriopb/laravel-api-react/commit/4e0c216223443a09cbba4b5196763374e8295b4b))
+* **custom:** senha com codigo ([f503bab](https://github.com/paulorogeriopb/laravel-api-react/commit/f503babfad190d234ab625362a34f9f840097c0b))
+
 ### [1.0.4](https://github.com/paulorogeriopb/laravel-api-react/compare/v1.0.3...v1.0.4) (2025-07-30)
 
 
