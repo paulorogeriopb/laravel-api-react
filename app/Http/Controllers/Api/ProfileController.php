@@ -115,12 +115,8 @@ class ProfileController extends Controller
     public function updatePassword(UserPasswordRequest $request): JsonResponse
     {
         try {
-            $user = Auth::user();
 
-            if (!($user instanceof \App\Models\User)) {
-                $user = \App\Models\User::find(Auth::id());
-            }
-
+            $user = User::find(Auth::id());
 
             if (!$user) {
                 return response()->json([

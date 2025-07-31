@@ -15,6 +15,8 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');//http:/
 
 //Recuperar senha
 Route::post("/forgot-password-code", [RecoverPasswordCodeController::class, 'forgotPasswordCode']);
+Route::post("/reset-password-validate-code", [RecoverPasswordCodeController::class, 'resetPasswordValidateCode']);
+Route::post("/reset-password-code", [RecoverPasswordCodeController::class, 'resetPasswordCode']);
 
 
 
